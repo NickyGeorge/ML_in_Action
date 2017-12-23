@@ -2,7 +2,7 @@ from numpy import *
 import operator
 import matplotlib.pyplot as plt
 
-
+# 创建数据和label
 def createDataSet():
     group = array([[1.0,1.1],[1.0,1.0],[0,0],[0,0.1]])
     labels = ['A','A','B','B']
@@ -34,7 +34,12 @@ def classify0(inX,dataSet,labels,k):
     return sortedClassCount[0][0]
 # group, labels = createDataSet()
 # print(classify0([0,0], group, labels, 3))
+# print(classify0([0.9, 0.8], group, labels, 3))
 #####################################################
+
+
+
+
 
 #将文本记录转换为numpy的解析程序
 #####################################################
@@ -52,14 +57,32 @@ def file2matrix(filename):
         classLabelVector.append(int(listFromLine[-1]))
         index += 1
     return returnMat, classLabelVector
-
 datingDataMat, datingLabels = file2matrix('datingTestSet2.txt')
 #使用matplotlib创建散点图
 fig = plt.figure()
 ax = fig.add_subplot(111)
-# ax.scatter(datingDataMat[:,1], datingDataMat[:,2])
-ax.scatter(datingDataMat[:,0], datingDataMat[:,1], 15.0*array(datingLabels), 15.0*array(datingLabels)) # 加上彩色标签的散点图
-plt.show()
+# ax.scatter(datingDataMat[:,1], datingDataMat[:,2])  #plot1
+# ax.scatter(datingDataMat[:,0], datingDataMat[:,1], 15.0*array(datingLabels), 15.0*array(datingLabels)) # 加上彩色标签的散点图
+#lt.show()
 # print(datingDataMat)
 # print(datingLabels)
+#####################################################
+
+
+
+
+#归一化特征值（将数据的特征值归一化到0-1范围之间）
+#####################################################
+def autoNorm(dataSet):
+    minVals = dataSet.min(0)
+    maxVals = dataSet.max(0)
+    ranges = maxVals - minVals
+    normDataSet = zeros(shape(dataSet))
+    m = dataSet.shape[0]
+    normDataSet = dataSet - tile(minVals, (m,1))
+    normDataSet = normDataSet/tile(ranges, (m,1))  # 特征值相除
+    return normDataSet, ranges, minVals
+
+normMat, ranges, minVals = autoNorm(datingDataMat)
+#print(normMat)   # 输出归一化后的数据
 #####################################################
