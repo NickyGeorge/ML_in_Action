@@ -25,12 +25,15 @@ for i in range(len(x)):
 # ydata = b + w*xdata
 b = -120 # initial b
 w = -4 # initial w
-lr = 0.0000001 # learing rate
+lr = 1 # learing rate
 iteration = 100000
 
 # Store initial values for plotting
 b_history = [b]
 w_history = [w]
+
+lr_b = 0
+lr_w = 0
 
 #Iterations
 for i in range(iteration):
@@ -41,9 +44,11 @@ for i in range(iteration):
         b_grad = b_grad - 2.0*(y_data[n] - b - w*x_data[n])*1.0
         w_grad = w_grad - 2.0*(y_data[n] - b - w*x_data[n])*x_data[n]
 
+    lr_b = lr_b + b_grad**2
+    lr_w = lr_w + w_grad**2
     # Update parameters.
-    b = b - lr * b_grad
-    w = w - lr * w_grad
+    b = b - lr/np.sqrt(lr_b) * b_grad
+    w = w - lr/np.sqrt(lr_w) * w_grad
 
     # Store parameters for plotting
     b_history.append(b)
